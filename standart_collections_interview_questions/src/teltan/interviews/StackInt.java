@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
  * All methods have to have the Complexity O[1]
  */
 public class StackInt {
-	//TODO fields
+	// fields
 	private LinkedList<Integer> stackList = new LinkedList<>();
 	private LinkedList<Integer> maxList = new LinkedList<>();
 	
@@ -37,7 +37,7 @@ public class StackInt {
 	 */
 	
 	public int pop() {
-		//TODO
+		//
 		if (stackList.isEmpty()) {
 			throw new NoSuchElementException();
 		}
@@ -52,7 +52,7 @@ public class StackInt {
 	 * @return true if the stack is empty
 	 */
 	public boolean isEmpty() {
-		//TODO
+		//
 		
 		return stackList.isEmpty();
 	}
