@@ -17,12 +17,17 @@ public class Anagram {
 			return false;
 		}
 		HashMap<Character, Integer> charCountsMap = getCharCounts(word);
-		for(char c: anagram.toCharArray()) {
+		boolean res  = true;
+		char[] anagramChars = anagram.toCharArray();
+		int index=0;
+		while (index < anagramChars.length && res) {
+		
 
-			if (charCountsMap.compute(c, (k, v) -> v == null ? -1 : v - 1 ) < 0 )
-				return false;
+			if (charCountsMap.compute(anagramChars[index++], (k, v) -> v == null ? -1 : v - 1 ) < 0 )
+				res = false;
+		
 		}
-		return true;
+		return res;
 	}
 
 	private static HashMap<Character, Integer> getCharCounts(String word) {
