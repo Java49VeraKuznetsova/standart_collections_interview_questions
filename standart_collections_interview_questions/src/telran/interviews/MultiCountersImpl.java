@@ -1,62 +1,52 @@
 package telran.interviews;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class MultiCountersImpl implements MultiCounters {
-	private Map <Object,Integer> objects = new HashMap<>();
-	private TreeMap <Integer, Set<Object>> counters = new TreeMap<>();
-	
+	HashMap<Object, Integer> items = new HashMap<>(); // key - item, counter - counter
+	TreeMap<Integer, HashSet<Object>> counters = new TreeMap<>(); // key counter, counter - set of items having the key
+																	// -
+																	// counter
+//consider using the Map method computeIfAbsent	
+
 	@Override
 	public Integer addItem(Object item) {
-		// TODO Auto-generated method stub
-		Integer nItems = 
-				objects.merge(item, 1, (a_prev, b_one)-> a_prev+b_one);
-		counters.computeIfAbsent(nItems,
-				k -> new HashSet<>()).add(item);
-		if(nItems >1) {
-			removeFromSet(nItems-1, item);
+		Integer res = items.merge(item, 1, Integer::sum);
+		if (res > 1) {
+			counterItemsRemove(res - 1, item);
 		}
-		
-		
-		return null;
+		counters.computeIfAbsent(res, e -> new HashSet<>()).add(item);
+		return res;
 	}
 
-	private boolean removeFromSet(Integer key, Object item) {
-		// TODO Auto-generated method stub
-		if (key == null) {
-			return false;
+	private void counterItemsRemove(int counter, Object item) {
+		HashSet<Object> set = counters.get(counter);
+		set.remove(item);
+		if (set.isEmpty()) {
+			counters.remove(counter);
 		}
-		Set<Object> items = counters.get(key);
-		items.remove(item);
-		if(items.isEmpty() ) {
-			counters.remove(key);
-		}
-		return true;
 	}
 
 	@Override
 	public Integer getValue(Object item) {
-		// TODO Auto-generated method stub
-		return objects.get(item);
+
+		return items.get(item);
 	}
 
 	@Override
 	public boolean remove(Object item) {
-		// TODO Auto-generated method stub
-		return removeFromSet(objects.remove(item), item);
+		Integer counter = items.remove(item);
+		if (counter != null) {
+			counterItemsRemove(counter, item);
+		}
+		return counter != null;
 	}
 
 	@Override
 	public Set<Object> getMaxItems() {
-		// TODO Auto-generated method stub
-		
-		return counters.isEmpty() ? new HashSet<>() :
-			counters.get(counters.lastKey());
+		Entry<Integer, HashSet<Object>> maxCounter = counters.lastEntry() ;
+		return maxCounter != null ? maxCounter.getValue() : Collections.emptySet();
 	}
 
 }

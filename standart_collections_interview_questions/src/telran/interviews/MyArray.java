@@ -1,7 +1,8 @@
 package telran.interviews;
 
+
+
 import java.util.HashMap;
-import java.util.NoSuchElementException;
 
 /**
  * All methods of the class should have complexity O[1]
@@ -10,23 +11,21 @@ import java.util.NoSuchElementException;
  * @param <T>
  */
 public class MyArray<T> {
-	//TODO
-	private T value;
-	private T[] values;
+	private T allValues;
+	private int size;
+	private HashMap<Integer, T> mapOfSets;
 	public MyArray(int size) {
-		//TODO
-		values = (T[])(new Object[size]);
+		this.size = size;
+		mapOfSets = new HashMap<>();
 	}
 	/**
 	 * sets all array's elements with a given value
 	 * @param value
 	 */
 	public void setAll(T value) {
-		//TODO
 		
-		for (int i = 0; i<values.length; i++) {
-		this.values[i] = value;
-		}
+		mapOfSets = new HashMap<>();
+		allValues = value;
 	}
 	/**
 	 * 
@@ -34,10 +33,11 @@ public class MyArray<T> {
 	 * @return value at given index or null if index is wrong
 	 */
 	public T get(int index) {
-		//TODO
-		boolean correctIndex = checkIndex(index);
-		
-		return correctIndex ? values[index] : null;
+		T res = null;
+		if (index > -1 && index < size) {
+			res = mapOfSets.getOrDefault(index, allValues);
+		}
+		return res;
 	}
 	/**
 	 * sets a given value at a given index
@@ -46,19 +46,9 @@ public class MyArray<T> {
 	 * @param value
 	 */
 	public void set(int index, T value) {
-		//TODO
-		boolean correctIndex = checkIndex(index);
-		if (correctIndex) {
-			values[index] = value;
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException(index);
 		}
-	}
-	
-	private boolean checkIndex (int index) {
-		boolean correctIndex = false;
-		if (index >= values.length || index <0) {
-			throw new IndexOutOfBoundsException("Invalid index");
-		}
-		correctIndex = true;
-		return correctIndex;
+		mapOfSets.put(index, value);
 	}
 }

@@ -1,7 +1,5 @@
 package telran.interviews;
 
-
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class Anagram {
@@ -14,55 +12,26 @@ public class Anagram {
  * Example: yellow (wolely, lowlye, yellow) , wrong anagrams (yello, yelllw)
  */
 	public static boolean isAnagram(String word, String anagram) {
-		//
-		boolean flAnagram = true;
-		final int DEF_VALUE = 0;
-		System.out.println(DEF_VALUE);
-		if (word.length() != anagram.length() || word.isEmpty() || anagram.isEmpty()) {
-			flAnagram = false;
-			//return false;
-		}
-		else {
-			HashMap<Character, Integer> wordHashMap = getHashMap(word);
-			char [] anagramArray = anagram.toLowerCase().toCharArray();
-			System.out.println(anagramArray);
-			System.out.println(word);
-			for (char letter : anagramArray) {
-				int count = wordHashMap.getOrDefault(letter, DEF_VALUE);
-				
-				if (count == DEF_VALUE) {
-					flAnagram = false;
-					wordHashMap.remove(letter, DEF_VALUE);
-					} else {
-					count--;
-					if (count > 0) {
-					wordHashMap.put(letter, count);
-					} else {
-						wordHashMap.remove(letter);
-					}
-				}
-				
-							} 
-			
-			if (!wordHashMap.isEmpty()) {
-				flAnagram = false;
-			}
 		
+		if(word.length() != anagram.length()) {
+			return false;
 		}
-		return flAnagram;
-		
+		HashMap<Character, Integer> charCountsMap = getCharCounts(word);
+		for(char c: anagram.toCharArray()) {
+
+			if (charCountsMap.compute(c, (k, v) -> v == null ? -1 : v - 1 ) < 0 )
+				return false;
+		}
+		return true;
 	}
-	 
-	private static HashMap getHashMap (String word) {
-		HashMap<Character, Integer> wordHashMap = new HashMap<>();
-		 char[] wordArray = word.toLowerCase().toCharArray();
-		
-		for (Character letter: wordArray) {
-			wordHashMap.merge(letter, 1, (a, b) -> a+b);
+
+	private static HashMap<Character, Integer> getCharCounts(String word) {
+		HashMap<Character, Integer> res = new HashMap<>();
+		for(char c: word.toCharArray()) {
+			res.merge(c, 1, (a, b) -> a + b);
 		}
-		return wordHashMap;
+		return res;
 	}
-	
 
 
 }
