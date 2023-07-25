@@ -25,20 +25,26 @@ public class StreamTasks {
 			  .sum();
    }
    static public void displayOddEvenGrouping(int nNumbers) {
-	   new Random().ints(nNumbers, 0, Integer.MAX_VALUE).boxed()
+	   new Random().ints(nNumbers, 0, Integer.MAX_VALUE)
+	   .boxed()
 	   .collect(Collectors.groupingBy(n -> n % 2 == 0 ? "even" : "odd",
 			   Collectors.summingLong(x -> x)))
 	   .forEach((k, v) -> System.out.printf("%s -> %d\n", k, v));
    }
    static public void displayOccurancesFigures (int nNumbers) {
-	   new Random().ints(nNumbers, 0, Integer.MAX_VALUE).boxed()
+	   new Random().ints(nNumbers, 0, Integer.MAX_VALUE)
+	   .boxed()
 	   .flatMap(num -> getArraysFig(num).stream())
 	   .collect(Collectors.groupingBy(d -> d,
 			   Collectors.counting()))
-	  	   .forEach((k, v) -> System.out.printf("%d: %d\n", k, v));
-	
+	   .entrySet()
+	   .stream()
+	   .sorted((e1, e2) -> 
+		   Long.compare(e2.getValue(), e1.getValue()))
+	   .forEach(e -> System.out.printf("%d: %d\n", e.getKey(), e.getValue()));
 	 
    }
+   
    
    static private List<Integer> getArraysFig(int num) {
 	   int temp=num;
