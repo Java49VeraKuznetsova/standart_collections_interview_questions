@@ -26,6 +26,16 @@ class StreamTasksTests {
 		//displayOccurancesFigures(5);
 		displayOccurancesFigures(1_000_000);
 	}
+	
+	@Test
+	void displayDigitStatisticsTest() {
+	displayDigitStatistics();
 	}
-
+	@Test
+	void displayPersonsMap() {
+		
+		System.out.println(getRandomPersonMap(5));
+	}
+	
+}
 
